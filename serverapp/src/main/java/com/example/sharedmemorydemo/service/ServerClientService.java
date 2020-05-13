@@ -9,7 +9,7 @@ import android.os.RemoteException;
 import android.util.Log;
 import androidx.annotation.Nullable;
 import com.example.mylibrary.IMyRemoteCtrl;
-import com.example.mylibrary.IFrameDataCallBack;
+import com.example.mylibrary.IReadDataCallBack;
 import com.example.mylibrary.utils.MemoryFileHelper;
 
 import java.io.File;
@@ -22,7 +22,7 @@ public class ServerClientService extends Service {
     private byte[] isCanRead = new byte[1];
     private MemoryFile memoryFile = null;
     private MyRemoteCtrlImpl mCarcorderRemoteCtrl = new MyRemoteCtrlImpl();
-    private IFrameDataCallBack mIFrameDataCallBack = null;
+    private IReadDataCallBack mIReadDataCallBack = null;
     private ParcelFileDescriptor mParcelFileDescriptor = null;
     private int MEMORY_SIZE = 13729413 + 1;
     private IBinder mBinder = null;
@@ -48,19 +48,19 @@ public class ServerClientService extends Service {
         }
 
         @Override
-        public void registerFrameByteCallBack(IFrameDataCallBack frameDataCallBack) throws RemoteException {
-            mIFrameDataCallBack = frameDataCallBack;
+        public void registerFrameByteCallBack(IReadDataCallBack frameDataCallBack) throws RemoteException {
+            mIReadDataCallBack = frameDataCallBack;
         }
 
         @Override
-        public void unregisterFrameByteCallBack(IFrameDataCallBack frameDataCallBack) throws RemoteException {
-            if (mIFrameDataCallBack == null) return;
+        public void unregisterFrameByteCallBack(IReadDataCallBack frameDataCallBack) throws RemoteException {
+            if (mIReadDataCallBack == null) return;
 
             if (memoryFile != null) {
                 memoryFile.close();
                 memoryFile = null;
             }
-            mIFrameDataCallBack = null;
+            mIReadDataCallBack = null;
         }
 
         @Override
@@ -110,7 +110,7 @@ public class ServerClientService extends Service {
                     memoryFile.writeBytes(isCanRead, 0, 0, 1);
                 }
                 Log.d("mysdk"," 服务端 canReadFrameData " );
-                mIFrameDataCallBack.canReadFrameData();
+                mIReadDataCallBack.canReadFileData();
             } catch (RemoteException e ) {
                 Log.d("mysdk"," 服务端 readImage RemoteException " + e.getMessage() );
                 e.printStackTrace();
@@ -138,37 +138,4 @@ public class ServerClientService extends Service {
                 }
             }
         };
-
-    private byte[] readFileToByteArray(String path) {
-        File file = new File(path);
-        if(!file.exists()) {
-            Log.e("mysdk","File doesn't exist!");
-            return null;
-        }
-        FileInputStream in = null;
-        try {
-            in = new FileInputStream(file);
-            long inSize = in.getChannel().size();//判断FileInputStream中是否有内容
-            if (inSize == 0) {
-                Log.d("mysdk","The FileInputStream has no content!");
-                return null;
-            }
-
-            byte[] buffer = new byte[in.available()];//in.available() 表示要读取的文件中的数据长度
-            in.read(buffer);  //将文件中的数据读到buffer中
-            return buffer;
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-            return null;
-        } catch (IOException e) {
-            e.printStackTrace();
-            return null;
-        } finally {
-            try {
-                in.close();
-            } catch (IOException e) {
-                return null;
-            }
-        }
-    }
 }

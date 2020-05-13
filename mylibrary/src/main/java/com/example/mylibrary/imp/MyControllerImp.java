@@ -8,25 +8,25 @@ import android.os.IBinder;
 import android.os.RemoteException;
 import android.util.Log;
 
-import com.example.mylibrary.IFrameDataCallBack;
+import com.example.mylibrary.IReadDataCallBack;
 import com.example.mylibrary.IMyRemoteCtrl;
 import com.example.mylibrary.base.Controller;
 import com.example.mylibrary.callback.IReadBufferCallBack;
 
 public class MyControllerImp implements Controller {
-    protected MemoryFileImp mBackMemoryFile;
+    protected MemoryFileImp mMemoryFile;
     private IReadBufferCallBack mCallBack;
     private IMyRemoteCtrl mMyRemoteCtrl;
     private boolean isbind;
     private volatile static Controller mInstance;
     protected Context mContext;
 
-    private IFrameDataCallBack mFrameDataCallBack = new IFrameDataCallBack.Stub() {
+    private IReadDataCallBack mFrameDataCallBack = new IReadDataCallBack.Stub() {
         @Override
-        public void canReadFrameData() throws RemoteException {
-            if (mBackMemoryFile != null) {
+        public void canReadFileData() throws RemoteException {
+            if (mMemoryFile != null) {
                 Log.d("mysdk", " 服务端返回  sdk  mFrameDataCallBack  ");
-                mBackMemoryFile.readShareBuffer();
+                mMemoryFile.readShareBuffer();
             }
         }
     };
@@ -65,7 +65,7 @@ public class MyControllerImp implements Controller {
     @Override
     public void setBackBufferCallBack(IReadBufferCallBack callBack) {
         mCallBack = callBack;
-        mBackMemoryFile = MemoryFileImp.getInstance();
+        mMemoryFile = MemoryFileImp.getInstance();
     }
 
 
@@ -88,12 +88,12 @@ public class MyControllerImp implements Controller {
                     mMyRemoteCtrl.linkToDeath(mFrameDataCallBack.asBinder());
                     Log.d("mysdk", " sdk  onServiceConnected  setBackBufferCallBack ");
                     if (mCallBack != null) {
-                        mMyRemoteCtrl.setParcelFileDescriptor(mBackMemoryFile.getParcelFileDescriptor());
+                        mMyRemoteCtrl.setParcelFileDescriptor(mMemoryFile.getParcelFileDescriptor());
                         mMyRemoteCtrl.registerFrameByteCallBack(mFrameDataCallBack);
-                        mBackMemoryFile.setReadBufferCallBack(mCallBack);
+                        mMemoryFile.setReadBufferCallBack(mCallBack);
                     } else {
                         mMyRemoteCtrl.unregisterFrameByteCallBack(mFrameDataCallBack);
-                        mBackMemoryFile.release();
+                        mMemoryFile.release();
                     }
                     Log.d("mysdk", " sdk  onServiceConnected  setBackBufferCallBack  eld ");
                 } catch (RemoteException e) {
