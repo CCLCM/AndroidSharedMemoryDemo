@@ -16,9 +16,9 @@ import java.io.IOException;
 import java.lang.reflect.Field;
 
 public class MemoryFileImp implements IMemoryFile {
-    private IReadBufferCallBack  mReadBufferCallBack;
+    private IReadBufferCallBack mReadBufferCallBack;
     private Handler mHander;
-    private static  MemoryFileImp sMemoryFile;
+    private static MemoryFileImp sMemoryFile;
     protected final String TAG = "mysdk " + this.getClass().getSimpleName();
     protected MemoryFile mMemoryFile;
     private byte[] isCanRead = new byte[1];
@@ -30,7 +30,6 @@ public class MemoryFileImp implements IMemoryFile {
     private FileDescriptor mFD;
     protected boolean mIsStream;
     private int mReadNum;
-
 
 
     public static MemoryFileImp getInstance() {
@@ -163,8 +162,8 @@ public class MemoryFileImp implements IMemoryFile {
     }
 
     private void processData() {
-        if ( mReadBufferCallBack != null) {
-             mReadBufferCallBack.onReadBuffer(FIleBuffer, FIleBuffer.length);
+        if (mReadBufferCallBack != null) {
+            mReadBufferCallBack.onReadBuffer(FIleBuffer, FIleBuffer.length);
         }
     }
 
@@ -201,8 +200,8 @@ public class MemoryFileImp implements IMemoryFile {
     }
 
     @Override
-    public void setBufferYv12CallBack(IReadBufferCallBack callBack) {
-         mReadBufferCallBack = callBack;
+    public void setReadBufferCallBack(IReadBufferCallBack callBack) {
+        mReadBufferCallBack = callBack;
         if (callBack == null) {
             stopStream();
         } else {

@@ -31,7 +31,8 @@ public class MyControllerImp implements Controller {
         }
     };
 
-    private MyControllerImp() {}
+    private MyControllerImp() {
+    }
 
     @Override
     public int init(Context context) {
@@ -89,9 +90,10 @@ public class MyControllerImp implements Controller {
                     if (mCallBack != null) {
                         mMyRemoteCtrl.setParcelFileDescriptor(mBackMemoryFile.getParcelFileDescriptor());
                         mMyRemoteCtrl.registerFrameByteCallBack(mFrameDataCallBack);
-                        mBackMemoryFile.setBufferYv12CallBack(mCallBack);
+                        mBackMemoryFile.setReadBufferCallBack(mCallBack);
                     } else {
                         mMyRemoteCtrl.unregisterFrameByteCallBack(mFrameDataCallBack);
+                        mBackMemoryFile.release();
                     }
                     Log.d("mysdk", " sdk  onServiceConnected  setBackBufferCallBack  eld ");
                 } catch (RemoteException e) {

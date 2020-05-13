@@ -8,7 +8,8 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
-import com.example.mylibrary.MyLibSDK;
+
+import com.example.mylibrary.SharedMemoryLibSDK;
 import com.example.mylibrary.callback.IReadBufferCallBack;
 
 import java.io.ByteArrayInputStream;
@@ -23,8 +24,8 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
          iv = findViewById(R.id.iv);
-        MyLibSDK.getInstance().init(this);
-        MyLibSDK.getInstance().setBackBufferCallBack(new IReadBufferCallBack() {
+        SharedMemoryLibSDK.getInstance().init(this);
+        SharedMemoryLibSDK.getInstance().setBackBufferCallBack(new IReadBufferCallBack() {
             @Override
             public void onReadBuffer(final byte[] bytes, int i) {
                 Log.d("mysdk"," 客户端 读取到客户写到共享内存的大小为: " + bytes.length);
@@ -65,6 +66,6 @@ public class MainActivity extends AppCompatActivity {
 
     public void  readFIle(View view) {
         Log.d("mysdk"," 客户端  调用服务端的 readFIle  " );
-        MyLibSDK.getInstance().readFile("我是客户端");
+        SharedMemoryLibSDK.getInstance().readFile("我是客户端");
     }
 }

@@ -14,9 +14,11 @@ public interface Controller extends ServiceConnection {
      */
     int init(Context context);
 
-
+    /**
+     * read file
+     * @param msg
+     */
     void readFile(String msg);
-
     /**
      * setBackBufferCallBack
      *

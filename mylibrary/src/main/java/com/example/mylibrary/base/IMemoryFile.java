@@ -5,7 +5,7 @@ import android.os.ParcelFileDescriptor;
 import com.example.mylibrary.callback.IReadBufferCallBack;
 
 public interface IMemoryFile {
-    void setBufferYv12CallBack(IReadBufferCallBack callBack);
+    void setReadBufferCallBack(IReadBufferCallBack callBack);
 
     ParcelFileDescriptor getParcelFileDescriptor();
 

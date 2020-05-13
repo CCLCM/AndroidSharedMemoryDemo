@@ -6,18 +6,18 @@ import com.example.mylibrary.base.Controller;
 import com.example.mylibrary.callback.IReadBufferCallBack;
 import com.example.mylibrary.imp.MyControllerImp;
 
-public class MyLibSDK {
-    private volatile static MyLibSDK mInstance;
+public class SharedMemoryLibSDK {
+    private volatile static SharedMemoryLibSDK mInstance;
     private Controller mController;
 
-    private MyLibSDK() {
+    private SharedMemoryLibSDK() {
     }
 
-    public static MyLibSDK getInstance() {
+    public static SharedMemoryLibSDK getInstance() {
         if (mInstance == null) {
-            synchronized (MyLibSDK.class) {
+            synchronized (SharedMemoryLibSDK.class) {
                 if (mInstance == null) {
-                    mInstance = new MyLibSDK();
+                    mInstance = new SharedMemoryLibSDK();
                 }
             }
         }
